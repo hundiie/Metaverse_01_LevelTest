@@ -1,26 +1,23 @@
 ﻿#include <iostream>
 
-#define count 5
+void sortArray(int* arr, int n)
+{
+	for (int i = 0; i < n; i++)
+	{
+		for (int j = 0; j < n - 1; j++)
+		{
+			if (arr[j] > arr[j + 1])
+			{
+				int change = arr[j + 1];
+				arr[j + 1] = arr[j];
+				arr[j] = change;
+			}
+		}
+	}
+}
 
 int main(void)
 {
-	int a = count - 1;
-	int b = 1;
-
-	for (int i = 0; i < count; i++)
-	{
-		for (int j = a; j > 0; j--)
-		{
-			std::cout << " ";
-		}
-		a -= 1;
-
-		for (int k = 0; k < b; k++)
-		{
-			std::cout << "*";
-		}
-		b += 2;
-
-		std::cout << std::endl;
-	}
+	int arr[5] = { 5, 2, 4, 1, 3 };
+	sortArray(arr, 5);
 }
