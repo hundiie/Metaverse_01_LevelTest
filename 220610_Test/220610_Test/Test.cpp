@@ -67,13 +67,13 @@ int main(void)
 
 void sortArray(int* arr, int n)
 {
-	for (int i = 0; i < n; i++)
+	for (int i = 0; i < n - 1; i++)
 	{
-		for (int j = 0; j < n - 1; j++)
+		for (int j = 0; j < n - (i + 1); j++)
 		{
-			if (arr[j] > arr[j + 1])
+			if (arr[j] > arr[j + 1])// 앞뒤 비교
 			{
-				int change = arr[j + 1];
+				int change = arr[j + 1];//바꾸기
 				arr[j + 1] = arr[j];
 				arr[j] = change;
 			}
@@ -83,8 +83,13 @@ void sortArray(int* arr, int n)
 
 int main(void)
 {
-	int arr[5] = { 5, 2, 4, 1, 3 };
+	int arr[5] = { 5, 2, 4, 1, 3};
 	sortArray(arr, 5);
+
+	for (int i = 0; i < 5; i++)
+	{
+		std::cout <<arr[i];
+	}
 }
 */
 #pragma endregion
@@ -136,27 +141,29 @@ int main(void)
 */
 #pragma endregion
 #pragma region 6번
-/*
+
 #include <iostream>
 #include <string>
 
-int main(void)
+/// <summary>
+/// 저장된 카드에서 카드를 뽑음
+/// </summary>
+/// <param name="card">string에 저장된 카드 값</param>
+/// <param name="card_num">string에 저장된 카드 수</param>
+/// <param name="player_">플레이어 수</param>
+/// <param name="pick">뽑을 카드 수</param>
+void pick(std::string* card,int card_num, int player_, int pick)
 {
-	std::string card[53];
-	std::string mark[4] = { "♠","♥","◆","♣" };
-	std::string num[13] = { "A ","2 ","3 ","4 ","5 ","6 ","7 ","8 ","9 ","10","J ","Q ","K " };
-
-	card[52] = "JOKER";
-
-	for (int k = 0; k < 53; k++)
+	if (pick*player_ > card_num)
 	{
-		card[k] = mark[k % 4] + num[k % 13];
+		std::cout << "잘못된 입력입니다.(카드의 숫자가 부족함)";
+		return;
 	}
-
+	int* player = new int[pick*player_];
+	
 	srand(time(NULL));
-	int player[14] = {};
-
-	for (int i = 0; i < 14; i++)
+	
+	for (int i = 0; i < pick * player_; i++)
 	{
 		player[i] = rand() % 53;
 		for (int j = 0; j < i; j++)
@@ -168,21 +175,43 @@ int main(void)
 			}
 		}
 	}
-
-	std::cout << "Player1 : ";
-	for (int c = 0; c < 7; c++)
+	int player_num = 0;
+	for (int i = 0; i < player_; i++)
 	{
-		std::cout << card[player[c]] << " ";
-	}
+		if (player_num + 1 < 10)
+		{
+			std::cout << "Player 0" << player_num + 1 << " : ";
+		}
+		else
+		{
+			std::cout << "Player " << player_num + 1 << " : ";
+		}
 
-	std::cout << "\nPlayer2 : ";
-	for (int c = 7; c < 14; c++)
-	{
-		std::cout << card[player[c]] << " ";
+		for (int c = pick * player_num; c < pick * (player_num + 1); c++)
+		{
+			std::cout << (c % pick) + 1  << "번째 카드 : " << card[player[c]] << " ";
+		}
+		std::cout << std::endl;
+		player_num++;
 	}
-return 0;
 }
-*/
+
+int main(void)
+{
+	std::string card[53];
+	std::string mark[4] = { "♠","♥","◆","♣" };
+	std::string num[13] = { "A ","2 ","3 ","4 ","5 ","6 ","7 ","8 ","9 ","10","J ","Q ","K " };
+
+
+	for (int k = 0; k < 52; k++)
+	{
+		card[k] = mark[k % 4] + num[k % 13];
+	}
+	card[52] = "Joke";
+	
+	pick(card, 53, 7, 6);// 카드 값, 카드 수 , 플레이어 수, 플레이어가 뽑는 카드 수
+}
+
 #pragma endregion
 #pragma region 7번
 /*
@@ -298,56 +327,73 @@ int main(void)
 */
 #pragma endregion
 #pragma region 8번
+/*
 #include <iostream>
 #include <string>
 
 using namespace std;
-	
-	//  1 ...	N-3			N-2			N-1			N
-	//	(N*4-4)=(N*3+N-4)...			(N*5-6)		(N+1)
-	//	.											(N+2)
-	//	.											(N+3)
-	//	(N*3-2+2)									.
-	//	(N*3-2+1)									.
-	//	(N*3-2)=(N*2+N-2)...(N*2+2)		(N*2+1)		(N*2-1)=(N+N-1)
-int test[1000][1000];
+
 int main(void)
 {
 	int N;
 	cout << "배열의 크기를 입력하세요 : ";
 	cin >> N;
-	
-	int in = 0;
-	int sero = 1;
-	int garo = 0;
 
+	int** test = new int* [N];
 	for (int i = 0; i < N; i++)
 	{
-		test[garo][i] = i + 1;
+		test[i] = new int[N];
 	}
+
+	int*** a = new int** [N];
 	for (int i = 0; i < N; i++)
 	{
-		test[i + sero][N - sero] = N + i + 1;
+		int* [N];
 	}
-	for (int i = 0; i < N - in; i++)
+
+	int count = 1;
+
+	int UP = 0;
+	int D_COUNT = 0;
+	int DOWN = N - 1;
+	while (count <= N*N)
 	{
-		test[N - 1][i] = N * 3 - 2 - i;
+		for (int i = UP; i < N - D_COUNT; i++)
+		{
+			test[UP][i] = count;
+			count++;
+		}
+		for (int i = UP + 1; i < N - D_COUNT; i++)
+		{
+			test[i][DOWN] = count;
+			count++;
+		}
+
+		for (int i = DOWN - 1; i > D_COUNT - 1; i--)
+		{
+			test[DOWN][i] = count;
+			count++;
+		}
+
+		for (int i = DOWN - 2; i > D_COUNT - 1; i--)
+		{
+			test[i + 1][UP] = count;
+			count++;
+		}
+		UP++;
+		D_COUNT++;
+		DOWN--;
 	}
-	in++;
-	for (int i = 0; i < N - in; i++)
-	{
-		test[i][garo] = N * 4 - 3 - i;
-	}
-	
 
 	//출력
 	for (int i = 0; i < N; i++)
 	{
 		for (int j = 0; j < N; j++)
 		{
-			cout << test[i][j]<< "\t";
+			cout << test[i][j] << "\t";
 		}
 		cout << endl << endl;
 	}
 }
+*/
 #pragma endregion
