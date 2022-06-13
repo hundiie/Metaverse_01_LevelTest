@@ -141,7 +141,7 @@ int main(void)
 */
 #pragma endregion
 #pragma region 6번
-
+/*
 #include <iostream>
 #include <string>
 
@@ -189,7 +189,7 @@ void pick(std::string* card,int card_num, int player_, int pick)
 
 		for (int c = pick * player_num; c < pick * (player_num + 1); c++)
 		{
-			std::cout << (c % pick) + 1  << "번째 카드 : " << card[player[c]] << " ";
+			std::cout << card[player[c]] << " ";
 		}
 		std::cout << std::endl;
 		player_num++;
@@ -211,10 +211,10 @@ int main(void)
 	
 	pick(card, 53, 7, 6);// 카드 값, 카드 수 , 플레이어 수, 플레이어가 뽑는 카드 수
 }
-
+*/
 #pragma endregion
 #pragma region 7번
-/*
+
 #include <iostream>
 #include <string>
 
@@ -246,12 +246,13 @@ int main(void)
 	while (true)
 	{
 		//빙고판
-
+		system("cls");
+		
 		for (int i = 0; i < 5; i++)
 		{
 			for (int j = 0; j < 5; j++)
 			{
-				if (bingo[i][j] != 0)
+				if (bingo[i][j] != false)
 				{
 					std::cout << bingo[i][j] << "\t";
 				}
@@ -266,10 +267,11 @@ int main(void)
 		//입력
 		int input;
 		std::cout << "현재 " << clear << "줄의 빙고가 완성되었습니다." << std::endl;
+		
+		if (clear == 12)return 0;
+
 		std::cout << "숫자를 입력해 주세요 : ";
 		std::cin >> input;
-
-		system("cls");
 
 		//숫자 지우기
 		for (int i = 0; i < 5; i++)
@@ -278,12 +280,13 @@ int main(void)
 			{
 				if (bingo[i][j] == input)
 				{
-					bingo[i][j] = 0;
+					bingo[i][j] = false;
+					break;
 				}
 			}
 		}
 
-		//직선 빙고 처리
+		//가로 빙고 처리
 		for (int i = 0; i < 5; i++)
 		{
 			if (bingo[i][0] == 0 && bingo[i][1] == 0 && bingo[i][2] == 0 && bingo[i][3] == 0 && bingo[i][4] == 0)
@@ -294,6 +297,10 @@ int main(void)
 					clear += 1;
 				}
 			}
+		}
+		//세로 빙고 처리
+		for (int i = 0; i < 5; i++)
+		{
 			if (bingo[0][i] == 0 && bingo[1][i] == 0 && bingo[2][i] == 0 && bingo[3][i] == 0 && bingo[4][i] == 0)
 			{
 				if (check[i + 5] != true)
@@ -321,10 +328,12 @@ int main(void)
 				clear += 1;
 			}
 		}
+		
+
+		
 	}
-	return 0;
 }
-*/
+
 #pragma endregion
 #pragma region 8번
 /*
