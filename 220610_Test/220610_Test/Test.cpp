@@ -97,32 +97,35 @@ int main(void)
 /*
 #include <iostream>
 
-int main(void)
+class Lotto
 {
-	int max;
-	int create;
+public:
+	static void makeLotto(int max, int create);
+	
+private:
+	static int* box;
+	static int create;
+	static int max;
+};
 
+void Lotto::makeLotto(int max, int create)
+{
 	srand(time(NULL));
-
-	std::cin >> max >> create;
 
 	if (create > max)
 	{
 		std::cout << "잘못된 입력";
-		return 0;
+		return;
 	}
-
-	int* box =  (int*)malloc(sizeof(int) * create);
 
 	for (int i = 0; i < create; i++)
 	{
 		bool check = true;
 
-		int random = rand() % max + 1;
-		box[i] = random;
+		Lotto::box[i] = rand() % max + 1;
 		for (int j = 0; j < i; j++)
 		{
-			if (box[j] == random)
+			if (Lotto::box[j] == Lotto::box[i])
 			{
 				check = false;
 				--i;
@@ -132,104 +135,65 @@ int main(void)
 		}
 		if (check == true)
 		{
-			std::cout << random << std::endl;
+			std::cout << Lotto::box[i] << std::endl;
 		}
 	}
-	free(box);
-	return 0;
+}
+int main(void)
+{
+	int max;
+	int create;
+
+	std::cin >> max >> create;
+	Lotto::makeLotto(max, create);
 }
 */
 #pragma endregion
 #pragma region 6번
-/*
+
 #include <iostream>
 #include <string>
-
-/// <summary>
-/// 저장된 카드에서 카드를 뽑음
-/// </summary>
-/// <param name="card">string에 저장된 카드 값</param>
-/// <param name="card_num">string에 저장된 카드 수</param>
-/// <param name="player_">플레이어 수</param>
-/// <param name="pick">뽑을 카드 수</param>
-void pick(std::string* card,int card_num, int player_, int pick)
-{
-	if (pick*player_ > card_num)
-	{
-		std::cout << "잘못된 입력입니다.(카드의 숫자가 부족함)";
-		return;
-	}
-	int* player = new int[pick*player_];
-	
-	srand(time(NULL));
-	
-	for (int i = 0; i < pick * player_; i++)
-	{
-		player[i] = rand() % 53;
-		for (int j = 0; j < i; j++)
-		{
-			if (player[j] == player[i])
-			{
-				i--;
-				break;
-			}
-		}
-	}
-	int player_num = 0;
-	for (int i = 0; i < player_; i++)
-	{
-		if (player_num + 1 < 10)
-		{
-			std::cout << "Player 0" << player_num + 1 << " : ";
-		}
-		else
-		{
-			std::cout << "Player " << player_num + 1 << " : ";
-		}
-
-		for (int c = pick * player_num; c < pick * (player_num + 1); c++)
-		{
-			std::cout << card[player[c]] << " ";
-		}
-		std::cout << std::endl;
-		player_num++;
-	}
-}
+#include "card.h"
 
 int main(void)
 {
+	const std::string mark[4] = { "♠","♥","◆","♣" };
+	const std::string num[13] = { "A ","2 ","3 ","4 ","5 ","6 ","7 ","8 ","9 ","10","J ","Q ","K " };
+	
 	std::string card[53];
-	std::string mark[4] = { "♠","♥","◆","♣" };
-	std::string num[13] = { "A ","2 ","3 ","4 ","5 ","6 ","7 ","8 ","9 ","10","J ","Q ","K " };
-
-
+	
 	for (int k = 0; k < 52; k++)
 	{
 		card[k] = mark[k % 4] + num[k % 13];
 	}
-	card[52] = "Joke";
 	
-	pick(card, 53, 7, 6);// 카드 값, 카드 수 , 플레이어 수, 플레이어가 뽑는 카드 수
+	card[52] = "Joke";
+
+	pick(card,53, 7, 7);// 카드 값, 플레이어 수, 플레이어가 뽑는 카드 수
 }
-*/
+
 #pragma endregion
 #pragma region 7번
-
+/*
 #include <iostream>
-#include <string>
 
+// 10 x 10 확장
+
+using namespace std;
+
+#define size 5
 int main(void)
 {
-	bool num[25] = { false };
-	int bingo[5][5];
-	bool check[12] = { false };
+	bool num[size * size] = { false };
+	int bingo[size][size];
+
 	srand(time(NULL));
 
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < size; i++)
 	{
-		for (int j = 0; j < 5; j++)
+		for (int j = 0; j < size; j++)
 		{
-			int random = rand() % 25;
+			int random = rand() % (size * size);
 			if (num[random] == false)
 			{
 				num[random] = true;
@@ -241,18 +205,19 @@ int main(void)
 			}
 		}
 	}
-	int clear = 0;
+	int clear = 0;//점수 체크용
+	bool check[size + size + 2] = {false};//빙고 중복 체크
 
-	while (true)
+	while(clear < size + size + 2)
 	{
 		//빙고판
 		system("cls");
-		
-		for (int i = 0; i < 5; i++)
+
+		for (int i = 0; i < size; i++)
 		{
-			for (int j = 0; j < 5; j++)
+			for (int j = 0; j < size; j++)
 			{
-				if (bingo[i][j] != false)
+				if (bingo[i][j] != false)//int false값 = 0
 				{
 					std::cout << bingo[i][j] << "\t";
 				}
@@ -267,29 +232,36 @@ int main(void)
 		//입력
 		int input;
 		std::cout << "현재 " << clear << "줄의 빙고가 완성되었습니다." << std::endl;
-		
-		if (clear == 12)return 0;
 
 		std::cout << "숫자를 입력해 주세요 : ";
 		std::cin >> input;
-
 		//숫자 지우기
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < size; i++)
 		{
-			for (int j = 0; j < 5; j++)
+			for (int j = 0; j < size; j++)
 			{
 				if (bingo[i][j] == input)
 				{
-					bingo[i][j] = false;
+					bingo[i][j] = false;//인풋 값 false로 바꿈
 					break;
 				}
 			}
 		}
+		//이 부분 어쩌지
 
 		//가로 빙고 처리
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < size; i++)
 		{
-			if (bingo[i][0] == 0 && bingo[i][1] == 0 && bingo[i][2] == 0 && bingo[i][3] == 0 && bingo[i][4] == 0)
+			bool bingo_check = true;
+			for (int j = 0; j < size; j++)
+			{
+				if (bingo[i][j] != 0)// 하나라도 0이 아니면 false
+				{
+					bingo_check = false;
+					break;
+				}
+			}
+			if (bingo_check == true)
 			{
 				if (check[i] != true)
 				{
@@ -299,41 +271,71 @@ int main(void)
 			}
 		}
 		//세로 빙고 처리
-		for (int i = 0; i < 5; i++)
+		for (int i = 0; i < size; i++)
 		{
-			if (bingo[0][i] == 0 && bingo[1][i] == 0 && bingo[2][i] == 0 && bingo[3][i] == 0 && bingo[4][i] == 0)
+			bool bingo_check = true;
+			for (int j = 0; j < size; j++)
 			{
-				if (check[i + 5] != true)
+				if (bingo[j][i] != 0)// 하나라도 0이 아니면 false
 				{
-					check[i + 5] = true;
+					bingo_check = false;
+					break;
+				}
+			}
+			if (bingo_check == true)
+			{
+				if (check[i+size] != true)
+				{
+					check[i+size] = true;
 					clear += 1;
 				}
 			}
 		}
 
 		//대각선 빙고 처리
-		if (bingo[0][0] == 0 && bingo[1][1] == 0 && bingo[2][2] == 0 && bingo[3][3] == 0 && bingo[4][4] == 0)
 		{
-			if (check[10] != true)
+			bool bingo_check = true;
+			for (int i = 0; i < size; i++)
 			{
-				check[10] = true;
-				clear += 1;
+				if (bingo[i][i] != 0)// 하나라도 0이 아니면 false
+				{
+					bingo_check = false;
+					break;
+				}
 			}
-		}
-		if (bingo[0][4] == 0 && bingo[1][3] == 0 && bingo[2][2] == 0 && bingo[3][1] == 0 && bingo[4][0] == 0)
-		{
-			if (check[11] != true)
+			if (bingo_check == true)//true일때 값 체크
 			{
-				check[11] = true;
-				clear += 1;
+				if (check[size * 2] != true)
+				{
+					check[size * 2] = true;
+					clear += 1;
+				}
 			}
 		}
 		
+		{
+			bool bingo_check = true;
+			for (int i = 0; i < size; i++)
+			{
 
-		
+				if (bingo[i][size - 1 - i] != 0)// 하나라도 0이 아니면 false
+				{
+					bingo_check = false;
+					break;
+				}
+			}
+			if (bingo_check == true)//true일때 값 체크
+			{
+				if (check[size * 2 + 1] != true)
+				{
+					check[size * 2 + 1] = true;
+					clear += 1;
+				}
+			}
+		}
 	}
 }
-
+*/
 #pragma endregion
 #pragma region 8번
 /*
@@ -354,18 +356,13 @@ int main(void)
 		test[i] = new int[N];
 	}
 
-	int*** a = new int** [N];
-	for (int i = 0; i < N; i++)
-	{
-		int* [N];
-	}
-
 	int count = 1;
 
 	int UP = 0;
 	int D_COUNT = 0;
 	int DOWN = N - 1;
-	while (count <= N*N)
+
+	//while (count <= N*N)
 	{
 		for (int i = UP; i < N - D_COUNT; i++)
 		{
@@ -406,3 +403,76 @@ int main(void)
 }
 */
 #pragma endregion
+/*
+//달팽이 교수님 버젼
+#include <iostream>
+
+using namespace std;
+
+#define NOT_VISITED 0
+
+int main()
+{
+
+	// 1. 배열 만들기
+	cout << "배열의 크기를 입력하세요 : ";
+	int size;
+	cin >> size;
+
+	int* arr = new int[size * size];
+	memset(arr, 0, sizeof(int) * size * size);
+
+	// 2. 달팽이 배열 세팅
+	// 2-1. 달팽이 데이터 초기화
+	int r = 0; // 달팽이의 위치(y 좌표)
+	int c = 0; // 달팽이의 위치(x 좌표)
+	int footstep = 1; // 발자국
+	enum Direction { DIR_RIGHT, DIR_DOWN, DIR_LEFT, DIR_UP, DIR_MAX };
+	Direction direction = DIR_RIGHT; // 달팽이가 움직이는 방향
+
+	for (int i = 0; i < size * size; ++i)
+	{
+		// 2-2. 발자국을 남긴다.
+		arr[r * size + c] = footstep;
+		++footstep;
+
+		// 2-3. 이동할 위치를 계산한다.
+		static const int dr[] = { 0, 1, 0, -1 };
+		static const int dc[] = { 1, 0, -1, 0 };
+
+		int nr = r + dr[(int)direction];
+		int nc = c + dc[(int)direction];
+
+		// 2-4. 이동이 가능한지 판별한다. 
+		// 2-4-1. 벽에 닿았을 때 => r, c의 위치가 [0, size)
+		// 2-4-2. 이미 지나온 곳일 때 => arr[nr][nc] != 0
+		if (nr < 0 || nr >= size || nc < 0 || nc >= size ||
+			arr[nr * size + nc] != NOT_VISITED)
+		{
+			// 2-5. 이동이 불가능하므로 방향 전환을 한다.
+			direction = (Direction)((direction + 1) % DIR_MAX);
+
+			// 2-6. 위치값을 다시 계산한다.
+			nr = r + dr[(int)direction];
+			nc = c + dc[(int)direction];
+		}
+
+		// 2-7. 이동한다.
+		r = nr;
+		c = nc;
+	}
+
+	// 3. 출력
+	for (int r = 0; r < size; ++r)
+	{
+		for (int c = 0; c < size; ++c)
+		{
+			cout << arr[r * size + c] << "\t";
+		}
+		cout << "\n";
+	}
+
+
+	delete[] arr;
+}
+*/
