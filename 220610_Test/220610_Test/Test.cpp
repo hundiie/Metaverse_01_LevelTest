@@ -1,5 +1,5 @@
 #pragma region 1번 
-/*
+
 #include <iostream>
 
 void swap1(int* a, int* b)
@@ -14,7 +14,7 @@ void swap2(int& a, int& b)
     a = b;
     b = c;
 }
-*/
+
 #pragma endregion
 #pragma region 2번
 /*
@@ -28,6 +28,11 @@ int main(void)
         std::cout << a << std::endl;
         a *= 3;
     }
+
+	for (int i = 3; i < 1000; i+= 3)
+	{
+		std::cout << i << std::endl;
+	}
 }
 */
 #pragma endregion
@@ -97,18 +102,7 @@ int main(void)
 /*
 #include <iostream>
 
-class Lotto
-{
-public:
-	static void makeLotto(int max, int create);
-	
-private:
-	static int* box;
-	static int create;
-	static int max;
-};
-
-void Lotto::makeLotto(int max, int create)
+void makeLotto(int max, int create)
 {
 	srand(time(NULL));
 
@@ -118,26 +112,28 @@ void Lotto::makeLotto(int max, int create)
 		return;
 	}
 
+	int* box = new int[create];//동적 배열
+
 	for (int i = 0; i < create; i++)
 	{
 		bool check = true;
 
-		Lotto::box[i] = rand() % max + 1;
+		box[i] = rand() % max + 1;
 		for (int j = 0; j < i; j++)
 		{
-			if (Lotto::box[j] == Lotto::box[i])
+			if (box[j] == box[i])
 			{
 				check = false;
 				--i;
 				break;
-
 			}
 		}
 		if (check == true)
 		{
-			std::cout << Lotto::box[i] << std::endl;
+			std::cout << box[i] << std::endl;
 		}
 	}
+	delete [] box;
 }
 int main(void)
 {
@@ -145,12 +141,12 @@ int main(void)
 	int create;
 
 	std::cin >> max >> create;
-	Lotto::makeLotto(max, create);
+	makeLotto(max, create);
 }
 */
 #pragma endregion
 #pragma region 6번
-
+/*
 #include <iostream>
 #include <string>
 #include "card.h"
@@ -171,7 +167,7 @@ int main(void)
 
 	pick(card,53, 7, 7);// 카드 값, 플레이어 수, 플레이어가 뽑는 카드 수
 }
-
+*/
 #pragma endregion
 #pragma region 7번
 /*
@@ -181,7 +177,7 @@ int main(void)
 
 using namespace std;
 
-#define size 5
+#define size 10
 int main(void)
 {
 	bool num[size * size] = { false };
@@ -338,7 +334,7 @@ int main(void)
 */
 #pragma endregion
 #pragma region 8번
-/*
+
 #include <iostream>
 #include <string>
 
@@ -358,37 +354,37 @@ int main(void)
 
 	int count = 1;
 
-	int UP = 0;
+	int UP = 0; //올라가는 숫자
+	int DOWN = N - 1;// 내려가는 숫자
 	int D_COUNT = 0;
-	int DOWN = N - 1;
 
-	//while (count <= N*N)
+	while (count <= N * N)// N * N값(배열 최대 값)이 출력되면 종료
 	{
-		for (int i = UP; i < N - D_COUNT; i++)
+		for (int i = UP; i < N - D_COUNT; i++)// 위쪽
 		{
 			test[UP][i] = count;
 			count++;
 		}
-		for (int i = UP + 1; i < N - D_COUNT; i++)
+		for (int i = UP + 1; i < N - D_COUNT; i++)// 오른쪽
 		{
 			test[i][DOWN] = count;
 			count++;
 		}
 
-		for (int i = DOWN - 1; i > D_COUNT - 1; i--)
+		for (int i = DOWN - 1; i > D_COUNT - 1; i--)// 아래쪽
 		{
 			test[DOWN][i] = count;
 			count++;
 		}
 
-		for (int i = DOWN - 2; i > D_COUNT - 1; i--)
+		for (int i = DOWN - 2; i > D_COUNT - 1; i--)// 왼쪽
 		{
 			test[i + 1][UP] = count;
 			count++;
 		}
 		UP++;
-		D_COUNT++;
 		DOWN--;
+		D_COUNT++;
 	}
 
 	//출력
@@ -400,8 +396,14 @@ int main(void)
 		}
 		cout << endl << endl;
 	}
+
+	for (int i = 0; i < N; i++)//이중 동적 배열 삭제
+	{
+		delete [] test[i];
+	}
+	delete[] test;
 }
-*/
+
 #pragma endregion
 /*
 //달팽이 교수님 버젼
