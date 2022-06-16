@@ -23,5 +23,11 @@
     <ClInclude Include="card.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
+    <ClInclude Include="Bingo.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Snail.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

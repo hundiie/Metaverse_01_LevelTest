@@ -155,17 +155,32 @@ int main(void)
 {
 	const std::string mark[4] = { "♠","♥","◆","♣" };
 	const std::string num[13] = { "A ","2 ","3 ","4 ","5 ","6 ","7 ","8 ","9 ","10","J ","Q ","K " };
-	
+
 	std::string card[53];
-	
+
 	for (int k = 0; k < 52; k++)
 	{
 		card[k] = mark[k % 4] + num[k % 13];
 	}
-	
-	card[52] = "Joke";
 
-	pick(card,53, 7, 7);// 카드 값, 플레이어 수, 플레이어가 뽑는 카드 수
+	card[52] = "Joke";
+	srand(time(NULL));
+
+	for (int i = 0; i < 8; i++)
+	{
+	Deck a;
+	a.pick();
+	a.draw();
+	std::cout << std::endl;
+	}
+	Deck::reset();
+	for (int i = 0; i < 9; i++)
+	{
+		Deck a;
+		a.pick();
+		a.draw();
+		std::cout << std::endl;
+	}
 }
 */
 #pragma endregion
@@ -177,158 +192,23 @@ int main(void)
 
 using namespace std;
 
-#define size 10
+#include "Bingo.h"
+
 int main(void)
 {
-	bool num[size * size] = { false };
-	int bingo[size][size];
+	Bingo a;
 
-	srand(time(NULL));
+	a.Init();//빙고 랜덤 세팅
 
-	for (int i = 0; i < size; i++)
+	while (true)
 	{
-		for (int j = 0; j < size; j++)
-		{
-			int random = rand() % (size * size);
-			if (num[random] == false)
-			{
-				num[random] = true;
-				bingo[i][j] = random + 1;
-			}
-			else
-			{
-				j--;
-			}
-		}
-	}
-	int clear = 0;//점수 체크용
-	bool check[size + size + 2] = {false};//빙고 중복 체크
-
-	while(clear < size + size + 2)
-	{
-		//빙고판
 		system("cls");
+		a.Print();//빙고판 표시
 
-		for (int i = 0; i < size; i++)
-		{
-			for (int j = 0; j < size; j++)
-			{
-				if (bingo[i][j] != false)//int false값 = 0
-				{
-					std::cout << bingo[i][j] << "\t";
-				}
-				else
-				{
-					std::cout << "\t";
-				}
-			}
-			std::cout << std::endl << std::endl;
-		}
-
-		//입력
 		int input;
-		std::cout << "현재 " << clear << "줄의 빙고가 완성되었습니다." << std::endl;
-
-		std::cout << "숫자를 입력해 주세요 : ";
 		std::cin >> input;
-		//숫자 지우기
-		for (int i = 0; i < size; i++)
-		{
-			for (int j = 0; j < size; j++)
-			{
-				if (bingo[i][j] == input)
-				{
-					bingo[i][j] = false;//인풋 값 false로 바꿈
-					break;
-				}
-			}
-		}
-		//이 부분 어쩌지
 
-		//가로 빙고 처리
-		for (int i = 0; i < size; i++)
-		{
-			bool bingo_check = true;
-			for (int j = 0; j < size; j++)
-			{
-				if (bingo[i][j] != 0)// 하나라도 0이 아니면 false
-				{
-					bingo_check = false;
-					break;
-				}
-			}
-			if (bingo_check == true)
-			{
-				if (check[i] != true)
-				{
-					check[i] = true;
-					clear += 1;
-				}
-			}
-		}
-		//세로 빙고 처리
-		for (int i = 0; i < size; i++)
-		{
-			bool bingo_check = true;
-			for (int j = 0; j < size; j++)
-			{
-				if (bingo[j][i] != 0)// 하나라도 0이 아니면 false
-				{
-					bingo_check = false;
-					break;
-				}
-			}
-			if (bingo_check == true)
-			{
-				if (check[i+size] != true)
-				{
-					check[i+size] = true;
-					clear += 1;
-				}
-			}
-		}
-
-		//대각선 빙고 처리
-		{
-			bool bingo_check = true;
-			for (int i = 0; i < size; i++)
-			{
-				if (bingo[i][i] != 0)// 하나라도 0이 아니면 false
-				{
-					bingo_check = false;
-					break;
-				}
-			}
-			if (bingo_check == true)//true일때 값 체크
-			{
-				if (check[size * 2] != true)
-				{
-					check[size * 2] = true;
-					clear += 1;
-				}
-			}
-		}
-		
-		{
-			bool bingo_check = true;
-			for (int i = 0; i < size; i++)
-			{
-
-				if (bingo[i][size - 1 - i] != 0)// 하나라도 0이 아니면 false
-				{
-					bingo_check = false;
-					break;
-				}
-			}
-			if (bingo_check == true)//true일때 값 체크
-			{
-				if (check[size * 2 + 1] != true)
-				{
-					check[size * 2 + 1] = true;
-					clear += 1;
-				}
-			}
-		}
+		a.Update(input);// 빙고 체크
 	}
 }
 */
@@ -337,7 +217,7 @@ int main(void)
 
 #include <iostream>
 #include <string>
-
+#include "Snail.h"
 using namespace std;
 
 int main(void)
@@ -346,62 +226,7 @@ int main(void)
 	cout << "배열의 크기를 입력하세요 : ";
 	cin >> N;
 
-	int** test = new int* [N];
-	for (int i = 0; i < N; i++)
-	{
-		test[i] = new int[N];
-	}
-
-	int count = 1;
-
-	int UP = 0; //올라가는 숫자
-	int DOWN = N - 1;// 내려가는 숫자
-	int D_COUNT = 0;
-
-	while (count <= N * N)// N * N값(배열 최대 값)이 출력되면 종료
-	{
-		for (int i = UP; i < N - D_COUNT; i++)// 위쪽
-		{
-			test[UP][i] = count;
-			count++;
-		}
-		for (int i = UP + 1; i < N - D_COUNT; i++)// 오른쪽
-		{
-			test[i][DOWN] = count;
-			count++;
-		}
-
-		for (int i = DOWN - 1; i > D_COUNT - 1; i--)// 아래쪽
-		{
-			test[DOWN][i] = count;
-			count++;
-		}
-
-		for (int i = DOWN - 2; i > D_COUNT - 1; i--)// 왼쪽
-		{
-			test[i + 1][UP] = count;
-			count++;
-		}
-		UP++;
-		DOWN--;
-		D_COUNT++;
-	}
-
-	//출력
-	for (int i = 0; i < N; i++)
-	{
-		for (int j = 0; j < N; j++)
-		{
-			cout << test[i][j] << "\t";
-		}
-		cout << endl << endl;
-	}
-
-	for (int i = 0; i < N; i++)//이중 동적 배열 삭제
-	{
-		delete [] test[i];
-	}
-	delete[] test;
+	Snail::ArrayMake(N);
 }
 
 #pragma endregion
